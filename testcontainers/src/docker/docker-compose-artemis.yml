@@ -1,0 +1,24 @@
+version: '3.5'
+services:
+  artemismq:
+    image: vromero/activemq-artemis
+    environment:
+      ENABLE_JMX_EXPORTER: 'true'
+      ARTEMIS_USERNAME: admin
+      ARTEMIS_PASSWORD: admin
+    volumes:
+      - './broker-00.xml:/var/lib/artemis/etc-override/broker-00.xml'
+    ports:
+      - 8161:8161 #http web gui
+      - 61616:61616 #MQTT,AMQP,STOMP
+      - 9404:9404 #jmx prometheus
+
+  postgres:
+    image: postgis/postgis
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgrespw"
+      PGDATA: /data/postgres
+      POSTGRES_DB: testcontainers
+    ports:
+      - "5432:5432"
